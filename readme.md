@@ -125,7 +125,7 @@ Q(s, a) = Exp[ R_t + \gamma Q(S_{t+1}, A\_{t+1})| S_t = s, A_t = a ]
 where:
 
 - Q(s, a) represents the value of taking action a in state s
-- A\_{t+1} is the action taken in the next state
+- A{t+1} is the action taken in the next state
 
 This equation describes that the value of an action is the expected reward plus the discounted future value of subsequent actions.
 
