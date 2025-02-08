@@ -102,30 +102,30 @@ The **Bellman Equation** is a fundamental recursive formula in reinforcement lea
 
 ### Bellman Equation for State Value Function
 
-For a given policy \( \pi \), the **state value function** \( V(s) \) satisfies the following recursive relation:
+For a given policy pi , the **state value function** V(s) satisfies the following recursive relation:
 
-\[ V(s) = \mathbb{E}_\pi \left[ R_t + \gamma V(S_{t+1}) \mid S_t = s \right] \]
+V(s) = Exp[ R_t + gamma V(S_{t+1})| S_t = s ]
 
 where:
 
-- \( V(s) \) is the value of state \( s \)
-- \( R_t \) is the immediate reward at time \( t \)
-- \( \gamma \) is the discount factor \( (0 \leq \gamma \leq 1) \)
-- \( S\_{t+1} \) is the next state
-- The expectation is taken over all possible next states under policy \( \pi \)
+- V(s) is the value of state s
+- R_t is the immediate reward at time t
+- gamma is the discount factor (0 \leq \gamma \leq 1)
+- S{t+1} is the next state
+- The expectation is taken over all possible next states under policy \pi
 
 This equation expresses that the value of a state is the expected return starting from that state and following the policy \( \pi \).
 
 ### Bellman Equation for Action Value Function
 
-Similarly, for the **action value function** \( Q(s, a) \), the Bellman equation is given by:
+Similarly, for the **action value function** Q(s, a) , the Bellman equation is given by:
 
-\[ Q(s, a) = \mathbb{E}_\pi \left[ R_t + \gamma Q(S_{t+1}, A\_{t+1}) \mid S_t = s, A_t = a \right] \]
+Q(s, a) = Exp[ R_t + \gamma Q(S_{t+1}, A\_{t+1})| S_t = s, A_t = a ]
 
 where:
 
-- \( Q(s, a) \) represents the value of taking action \( a \) in state \( s \)
-- \( A\_{t+1} \) is the action taken in the next state
+- Q(s, a) represents the value of taking action a in state s
+- A\_{t+1} is the action taken in the next state
 
 This equation describes that the value of an action is the expected reward plus the discounted future value of subsequent actions.
 
