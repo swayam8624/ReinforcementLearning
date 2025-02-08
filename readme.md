@@ -32,7 +32,8 @@ _The next state depends only on the current state , not on previous states as th
 
 #### Trajectory vs Episode
 
-- Trajectory is the sequence of Elements that are generated when the agent moves from one state to another , Tao = S0,A0,R1,S1,A1,R2,S2,A2,R3,S3..
+- Trajectory is the sequence of Elements that are generated when the agent moves from one state to another ,
+  `Tao = S0,A0,R1,S1,A1,R2,S2,A2,R3,S3..`
 - Episodic is the Trajectory from initial state to terminal state..
 
 #### Reward vs Return
@@ -42,3 +43,8 @@ _The next state depends only on the current state , not on previous states as th
   - short term rewards can worsen long term rewards (eg - chess moves)
 - `Rewards` is the immediate result that our action produces.
 - `Return` is the sum of rewards from a certain time (t) till the task is completed (T)
+
+### Discount Factor
+
+- Modifying Return to Boost efficieny , we achieve it by multiplying `gamma(y)->[0,1]`[discount factor] to each reward in a gp
+  Go (return from time 0) = R_1 + y*R_2 + y^2 * R_3 + y^3 \* R_4 .... +... + y^T-t-1 + R_T
