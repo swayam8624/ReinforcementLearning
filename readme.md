@@ -137,3 +137,112 @@ This equation describes that the value of an action is the expected reward plus 
 - **Optimality Principle**: Helps in deriving the **Bellman Optimality Equation**, which leads to finding the optimal policy.
 
 The Bellman Equation is a powerful tool that enables efficient decision-making in uncertain environments by breaking down complex problems into recursive relationships.
+
+# Dynamic Programming in Reinforcement Learning
+
+Dynamic Programming (DP) is a fundamental concept in Reinforcement Learning (RL) that involves breaking down complex problems into simpler subproblems. It is used to solve Markov Decision Processes (MDPs) by leveraging the principle of optimality and the Bellman equation.
+
+## Introduction
+
+Dynamic Programming is a method used to solve problems by breaking them down into simpler subproblems. In the context of Reinforcement Learning, DP algorithms are used to find optimal policies for MDPs by iteratively improving value functions and policies.
+
+## Key Concepts
+
+### Markov Decision Process (MDP)
+
+An MDP is defined by the tuple \((S, A, P, R, \gamma)\), where:
+
+- \(S\): Set of states
+- \(A\): Set of actions
+- \(P\): Transition probability matrix, \(P(s' | s, a)\)
+- \(R\): Reward function, \(R(s, a, s')\)
+- \(\gamma\): Discount factor, \(0 \leq \gamma \leq 1\)
+
+### Bellman Equation
+
+The Bellman equation is a recursive decomposition of the value function. For a given policy \(\pi\), the value function \(V^\pi(s)\) satisfies:
+
+\[
+V^\pi(s) = \sum*{a} \pi(a|s) \sum*{s'} P(s' | s, a) [R(s, a, s') + \gamma V^\pi(s')]
+\]
+
+### Value Function
+
+The value function \(V^\pi(s)\) represents the expected return when starting in state \(s\) and following policy \(\pi\) thereafter.
+
+\[
+V^\pi(s) = \mathbb{E} \left[ \sum_{t=0}^{\infty} \gamma^t R_t \mid s_0 = s, \pi \right]
+\]
+
+### Policy
+
+A policy \(\pi\) is a mapping from states to actions. It can be deterministic or stochastic.
+
+\[
+\pi: S \rightarrow A
+\]
+
+## Dynamic Programming Algorithms
+
+### Policy Evaluation
+
+Policy evaluation is the process of computing the value function \(V^\pi\) for a given policy \(\pi\). It involves solving the Bellman equation iteratively.
+
+\[
+V*{k+1}(s) = \sum*{a} \pi(a|s) \sum\_{s'} P(s' | s, a) [R(s, a, s') + \gamma V_k(s')]
+\]
+
+### Policy Improvement
+
+Policy improvement involves updating the policy \(\pi\) to be greedy with respect to the current value function \(V^\pi\).
+
+\[
+\pi'(s) = \arg\max*{a} \sum*{s'} P(s' | s, a) [R(s, a, s') + \gamma V^\pi(s')]
+\]
+
+### Policy Iteration
+
+Policy iteration alternates between policy evaluation and policy improvement until convergence to an optimal policy.
+
+1. **Policy Evaluation**: Compute \(V^\pi\) for the current policy \(\pi\).
+2. **Policy Improvement**: Update \(\pi\) to be greedy with respect to \(V^\pi\).
+3. Repeat until \(\pi\) converges.
+
+### Value Iteration
+
+Value iteration is a dynamic programming algorithm that combines policy evaluation and policy improvement into a single step.
+
+\[
+V*{k+1}(s) = \max*{a} \sum\_{s'} P(s' | s, a) [R(s, a, s') + \gamma V_k(s')]
+\]
+
+## Formulas
+
+- **Bellman Expectation Equation**:
+  \[
+  V^\pi(s) = \sum*{a} \pi(a|s) \sum*{s'} P(s' | s, a) [R(s, a, s') + \gamma V^\pi(s')]
+  \]
+
+- **Bellman Optimality Equation**:
+  \[
+  V^_(s) = \max*{a} \sum*{s'} P(s' | s, a) [R(s, a, s') + \gamma V^_(s')]
+  \]
+
+- **Q-Function**:
+  \[
+  Q^\pi(s, a) = \sum\_{s'} P(s' | s, a) [R(s, a, s') + \gamma V^\pi(s')]
+  \]
+
+- **Optimal Q-Function**:
+  \[
+  Q^_(s, a) = \sum*{s'} P(s' | s, a) [R(s, a, s') + \gamma \max*{a'} Q^_(s', a')]
+  \]
+
+## References
+
+- Sutton, R. S., & Barto, A. G. (2018). Reinforcement Learning: An Introduction. MIT Press.
+- Bellman, R. (1957). Dynamic Programming. Princeton University Press.
+
+---
+
+This markdown file provides an overview of Dynamic Programming in the context of Reinforcement Learning, including key concepts, algorithms, and formulas. You can use this as a reference in your Git README file.
