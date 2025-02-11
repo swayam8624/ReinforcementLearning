@@ -238,11 +238,237 @@ V*{k+1}(s) = \max*{a} \sum\_{s'} P(s' | s, a) [R(s, a, s') + \gamma V_k(s')]
   Q^_(s, a) = \sum*{s'} P(s' | s, a) [R(s, a, s') + \gamma \max*{a'} Q^_(s', a')]
   \]
 
-## References
+# Monte Carlo Methods in Reinforcement Learning
 
-- Sutton, R. S., & Barto, A. G. (2018). Reinforcement Learning: An Introduction. MIT Press.
-- Bellman, R. (1957). Dynamic Programming. Princeton University Press.
+Monte Carlo (MC) methods are a class of algorithms in Reinforcement Learning (RL) that rely on repeated random sampling to estimate value functions and optimize policies. Unlike Dynamic Programming (DP), Monte Carlo methods do not require a complete model of the environment and instead learn directly from episodes of experience.
+
+## Introduction
+
+Monte Carlo methods are used in RL to estimate value functions and optimize policies by averaging the returns observed from sampled episodes. These methods are **model-free**, meaning they do not require knowledge of the environment's dynamics (transition probabilities or reward function). Instead, they learn directly from experience.
 
 ---
 
-This markdown file provides an overview of Dynamic Programming in the context of Reinforcement Learning, including key concepts, algorithms, and formulas. You can use this as a reference in your Git README file.
+## Key Concepts
+
+### Episodic Tasks
+
+Monte Carlo methods are applicable only to **episodic tasks**, where the agent's interaction with the environment can be divided into episodes that terminate after a finite number of steps.
+
+### Returns
+
+The **return** \(G_t\) is the total discounted reward from time step \(t\) onward:
+
+\[
+G*t = R*{t+1} + \gamma R*{t+2} + \gamma^2 R*{t+3} + \dots = \sum*{k=0}^{\infty} \gamma^k R*{t+k+1}
+\]
+
+where:
+
+- \(R_t\): Reward at time step \(t\)
+- \(\gamma\): Discount factor (\(0 \leq \gamma \leq 1\))
+
+### Value Function Estimation
+
+The value function \(V^\pi(s)\) for a policy \(\pi\) is the expected return when starting in state \(s\) and following \(\pi\):
+
+\[
+V^\pi(s) = \mathbb{E}[G_t \mid S_t = s, \pi]
+\]
+
+Similarly, the action-value function \(Q^\pi(s, a)\) is the expected return when starting in state \(s\), taking action \(a\), and following \(\pi\) thereafter:
+
+\[
+Q^\pi(s, a) = \mathbb{E}[G_t \mid S_t = s, A_t = a, \pi]
+\]
+
+### Policy Evaluation
+
+Monte Carlo policy evaluation estimates \(V^\pi(s)\) or \(Q^\pi(s, a)\) by averaging the returns observed from episodes.
+
+### Policy Improvement
+
+Once the value function is estimated, the policy can be improved by making it greedy with respect to the current value function.
+
+---
+
+## Monte Carlo Algorithms
+
+### Monte Carlo Prediction
+
+Monte Carlo prediction is used to estimate the value function \(V^\pi(s)\) or \(Q^\pi(s, a)\) for a given policy \(\pi\). It works by:
+
+1. Generating episodes using policy \(\pi\).
+2. Calculating the return \(G_t\) for each state or state-action pair.
+3. Averaging the returns to estimate the value function.
+
+For **first-visit MC**, each state's value is estimated using the return from the first time it is visited in an episode. For **every-visit MC**, all visits to a state are used.
+
+### Monte Carlo Control
+
+Monte Carlo control is used to find the optimal policy \(\pi^\*\). It alternates between:
+
+1. **Policy Evaluation**: Estimating \(Q^\pi(s, a)\) using Monte Carlo prediction.
+2. **Policy Improvement**: Updating the policy to be greedy with respect to \(Q^\pi(s, a)\).
+
+\[
+\pi(s) = \arg\max\_{a} Q^\pi(s, a)
+\]
+
+### Exploring Starts
+
+To ensure all state-action pairs are explored, Monte Carlo control often uses **exploring starts**, where every state-action pair has a non-zero probability of being selected as the start of an episode.
+
+### On-Policy vs Off-Policy Methods
+
+- **On-Policy**: Learn about the policy being used to generate episodes (e.g., \(\epsilon\)-greedy policies).
+- **Off-Policy**: Learn about a target policy while following a different behavior policy (e.g., Q-learning).
+
+---
+
+## Formulas
+
+1. **Return**:
+   \[
+   G*t = R*{t+1} + \gamma R*{t+2} + \gamma^2 R*{t+3} + \dots
+   \]
+
+2. **Value Function**:
+   \[
+   V^\pi(s) = \mathbb{E}[G_t \mid S_t = s, \pi]
+   \]
+
+3. **Action-Value Function**:
+   \[
+   Q^\pi(s, a) = \mathbb{E}[G_t \mid S_t = s, A_t = a, \pi]
+   \]
+
+4. **Policy Improvement**:
+   \[
+   \pi(s) = \arg\max\_{a} Q^\pi(s, a)
+   \]
+
+5. **Incremental Update Rule**:
+   For each episode, update the value function incrementally:
+   \[
+   V(S_t) \leftarrow V(S_t) + \alpha [G_t - V(S_t)]
+   \]
+
+# Temporal Difference Methods in Reinforcement Learning
+
+Temporal Difference (TD) methods are a class of model-free reinforcement learning algorithms that combine ideas from **Dynamic Programming (DP)** and **Monte Carlo (MC)** methods. Unlike Monte Carlo methods, TD methods do not require waiting until the end of an episode to update value estimates. Instead, they update estimates based on **bootstrapping**—using current estimates to improve future estimates.
+
+## Introduction
+
+Temporal Difference methods are **model-free** and **online**, meaning they learn directly from experience without requiring a model of the environment and update estimates after every time step. TD methods are widely used in RL because they are computationally efficient and can be applied to both episodic and continuing tasks.
+
+---
+
+## Key Concepts
+
+### Bootstrapping
+
+Bootstrapping is the process of updating estimates based on other estimates. In TD methods, the value of a state is updated using the observed reward and the estimated value of the next state.
+
+### TD Error
+
+The **TD error** is the difference between the target value (estimated return) and the current estimate. It drives updates to the value function.
+
+\[
+\delta*t = R*{t+1} + \gamma V(S\_{t+1}) - V(S_t)
+\]
+
+where:
+
+- \(R\_{t+1}\): Immediate reward
+- \(\gamma\): Discount factor
+- \(V(S_t)\): Current estimate of the value of state \(S_t\)
+- \(V(S*{t+1})\): Estimate of the value of the next state \(S*{t+1}\)
+
+### Value Function Estimation
+
+TD methods estimate the value function \(V(s)\) or action-value function \(Q(s, a)\) by iteratively updating their estimates using the TD error.
+
+### Policy Evaluation
+
+TD prediction is used to estimate the value function \(V^\pi(s)\) for a given policy \(\pi\).
+
+### Policy Improvement
+
+Once the value function is estimated, the policy can be improved by making it greedy with respect to the current value function.
+
+---
+
+## TD Algorithms
+
+### TD Prediction
+
+TD prediction is used to estimate the value function \(V^\pi(s)\) for a given policy \(\pi\). The update rule is:
+
+\[
+V(S*t) \leftarrow V(S_t) + \alpha [R*{t+1} + \gamma V(S\_{t+1}) - V(S_t)]
+\]
+
+where:
+
+- \(\alpha\): Learning rate
+- \(\gamma\): Discount factor
+
+### SARSA (On-Policy TD Control)
+
+SARSA is an on-policy TD control algorithm that estimates the action-value function \(Q(s, a)\) and improves the policy iteratively. The name SARSA comes from the sequence of updates: **State, Action, Reward, State, Action**.
+
+The update rule for SARSA is:
+
+\[
+Q(S*t, A_t) \leftarrow Q(S_t, A_t) + \alpha [R*{t+1} + \gamma Q(S*{t+1}, A*{t+1}) - Q(S_t, A_t)]
+\]
+
+SARSA follows the policy being learned (on-policy) and uses an \(\epsilon\)-greedy strategy for exploration.
+
+### Q-Learning (Off-Policy TD Control)
+
+Q-learning is an off-policy TD control algorithm that directly estimates the optimal action-value function \(Q^\*(s, a)\). It does not depend on the policy being followed, making it off-policy.
+
+The update rule for Q-learning is:
+
+\[
+Q(S*t, A_t) \leftarrow Q(S_t, A_t) + \alpha [R*{t+1} + \gamma \max*{a} Q(S*{t+1}, a) - Q(S_t, A_t)]
+\]
+
+Q-learning uses the maximum estimated value of the next state, making it more aggressive in pursuing the optimal policy.
+
+---
+
+## Formulas
+
+1. **TD Error**:
+   \[
+   \delta*t = R*{t+1} + \gamma V(S\_{t+1}) - V(S_t)
+   \]
+
+2. **TD Prediction Update**:
+   \[
+   V(S*t) \leftarrow V(S_t) + \alpha [R*{t+1} + \gamma V(S\_{t+1}) - V(S_t)]
+   \]
+
+3. **SARSA Update**:
+   \[
+   Q(S*t, A_t) \leftarrow Q(S_t, A_t) + \alpha [R*{t+1} + \gamma Q(S*{t+1}, A*{t+1}) - Q(S_t, A_t)]
+   \]
+
+4. **Q-Learning Update**:
+   \[
+   Q(S*t, A_t) \leftarrow Q(S_t, A_t) + \alpha [R*{t+1} + \gamma \max*{a} Q(S*{t+1}, a) - Q(S_t, A_t)]
+   \]
+
+5. **Value Function**:
+   \[
+   V^\pi(s) = \mathbb{E}[R_{t+1} + \gamma V^\pi(S_{t+1}) \mid S_t = s, \pi]
+   \]
+
+6. **Action-Value Function**:
+   \[
+   Q^\pi(s, a) = \mathbb{E}[R_{t+1} + \gamma Q^\pi(S_{t+1}, A_{t+1}) \mid S_t = s, A_t = a, \pi]
+   \]
+
+---
